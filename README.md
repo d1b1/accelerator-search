@@ -1,6 +1,6 @@
-# Techstars Portfolio Company Search
-This is a searchable UI for Techstars porfolio companies. The Techstars network has
-8k+ companies and 23k+ founders. It an untapped resource for early stage startups 
+# Accelerator Programs Search
+This is a searchable UI for startup accelerator programs. The Techstars network has
+32k+ companies and 23k+ founders. It an untapped resource for early-stage startups
 looking for network related help.
 
 - Find Funded startups in your space.

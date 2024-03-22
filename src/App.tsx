@@ -2,7 +2,6 @@ import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import headerImage from './assets/logo.png';
 import fallbackImage from './assets/no-logo.png';
-import crunchbaseLogo from './assets/crunchbase.png';
 import GitHubButton from 'react-github-btn';
 
 import {
@@ -22,8 +21,8 @@ import type { Hit } from 'instantsearch.js';
 import './App.css';
 
 const searchClient = algoliasearch(
-  'XQL63TD3C7',
-  '66c53445092004ffa41e392ae2e2bab1'
+  'UD1VE6KV0J',
+  'd0b91f75be19811b3ba4dfb05e0c6deb'
 );
 
 function toTitleCase(str) {
@@ -49,10 +48,10 @@ export function App() {
     <div>
       <header className="header">
         <h1 className="header-title">
-          <img src={headerImage} className="logo" />
+          {/* <img src={headerImage} className="logo" /> */}
         </h1>
         <p className="header-subtitle">
-          Find Companies by 'Program', 'year', 'status' or 'stage'.
+          Find Accelerators by 'Program', 'location', 'industry' or 'stage'.
         </p>
         <div className="gh-btn">
           <GitHubButton href="https://github.com/d1b1/techstar-search" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" data-show-count="true" aria-label="Star d1b1/techstar-search on GitHub">Star</GitHubButton>
@@ -62,7 +61,7 @@ export function App() {
       <div className="container">
         <InstantSearch
           searchClient={searchClient}
-          indexName="techstars"
+          indexName="Accelerators"
           future={future}
         >
           <Configure hitsPerPage={10} />
@@ -71,28 +70,35 @@ export function App() {
 
               <div className="filter-el">
                 <h4>
-                  Accelerator:
+                  Investment Stage:
                 </h4>
-                <RefinementList searchable="true" attribute="accelerator" searchablePlaceholder="Enter program..." limit="5" />
+                <RefinementList attribute="stages" />
               </div>
 
               <div className="filter-el">
                 <h4>
-                  Current Status:
+                  Industry:
                 </h4>
-                <RefinementList attribute="status" />
+                <RefinementList searchable="true" attribute="industries" searchablePlaceholder="Enter industry/vertical name..." limit="5" />
               </div>
 
               <div className="filter-el">
                 <h4>
-                  HQ City:
+                  City:
                 </h4>
                 <RefinementList searchable="true" searchablePlaceholder="Enter a city..." attribute="city" />
               </div>
 
               <div className="filter-el">
                 <h4>
-                  HQ Country:
+                  City:
+                </h4>
+                <RefinementList searchable="true" searchablePlaceholder="Enter a state..." attribute="state" />
+              </div>
+
+              <div className="filter-el">
+                <h4>
+                  Country:
                 </h4>
                 <RefinementList attribute="country" />
               </div>
@@ -101,12 +107,12 @@ export function App() {
                 <h4>
                   Program Status:
                 </h4>
-                <RefinementList attribute="program_status" transformItems={transformItems} />
+                <RefinementList attribute="programType" transformItems={transformItems} />
               </div>
 
             </div>
             <div className="search-panel__results">
-              <SearchBox placeholder="Enter a techstars company..." className="searchbox" />
+              <SearchBox placeholder="Enter an program name..." className="searchbox" />
 
               <Hits hitComponent={Hit} />
 
@@ -131,14 +137,14 @@ function ImageWithFallback({ src, alt, ...props }) {
     e.target.src = fallbackImage;
   };
 
-  return <img src={src} alt={alt} onError={handleError} {...props} />;
+  return <img src={src || ''} alt={alt} onError={handleError} {...props} />;
 }
 
 function Hit({ hit }: HitProps) {
   return (
     <article>
-      <a href={hit['website']} target="_blank">
-        <ImageWithFallback src={hit.logo_url} width="80" alt={hit.name} />
+      <a href={hit['webSite']} target="_blank">
+        <ImageWithFallback src={hit.logo} width="80" alt={hit.name} />
       </a>
       <div className="element">
         <h1>
@@ -148,43 +154,12 @@ function Hit({ hit }: HitProps) {
           <Highlight attribute="description" hit={hit} />
         </p>
         <p>
-          <b>HQ City:</b> <Highlight attribute="city" hit={hit} />, 
-          <b>Status:</b> <Highlight attribute="status" hit={hit} />,
-          <br />
+          <b>Location:</b> <Highlight attribute="city" hit={hit} />, <Highlight attribute="state" hit={hit} /> <Highlight attribute="country" hit={hit} /><br/>
+          <b>Program Type:</b> <Highlight attribute="programType" hit={hit} /><br/>
           <b>Type:</b> {hit['type']}, 
-          <b>Stage:</b> {hit['stage']}
-          <br />
-          <b>Accelerator:</b>
-          {hit['accelerator']} in {hit['session']}
+          <b>Industry:</b> {hit['industry']}, 
+          <b>Investment Stages:</b> {hit['stages']}
         </p>
-        <p>
-          <Highlight attribute="country" hit={hit} />
-        </p>
-        <p>
-          {hit['crunchbase_profile'] ?
-            <a href={`https://${hit['crunchbase_profile']}`} target="_blank">
-              <img src={crunchbaseLogo} className="crunch" />
-            </a>
-            : null}
-        </p>
-      </div>
-      <div className="info">
-        <table>
-          {hit['founder_profile_arrays'].map((item, index) => (
-            <tr key={index}>
-              <td>
-                <a href={`https://${item[3]}`} target="_blank">
-                  <img src={item[2]} className="avatar" />
-                </a>
-              </td>
-              <td>
-                {item[0]}
-                &nbsp;
-                { item[1] && item[1] !== 'UNKNOWN' ? `(${item[1]})` : null }
-              </td>
-            </tr>
-          ))}
-        </table>
       </div>
     </article>
   );
