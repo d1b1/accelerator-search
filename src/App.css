@@ -2,6 +2,7 @@ body,
 h1 {
   margin: 0;
   padding: 0;
+  font-size: 16px !important;
 }
 
 body {
@@ -12,6 +13,11 @@ body {
 em {
   background: cyan;
   font-style: normal;
+}
+
+.compLogo { 
+  float: left;
+  margin-bottom: 10px;
 }
 
 .header {
@@ -82,9 +88,9 @@ em {
   font-size: 1.2rem;
 }
 
-.container {
+/* .container {
   padding: 1rem;
-}
+} */
 
 .crunch {
   border-radius: 10px 10px 10px 10px !important;
@@ -97,6 +103,7 @@ em {
   border: 1px solid #DFDFDF;
   padding: 10px;
   margin-bottom: 10px;
+  border-radius: 5px;
 }
 
 .filter-el h4 {
@@ -109,14 +116,14 @@ em {
   display: flex;
 }
 
-.filters {
+/* .filters {
   flex: 1;
   padding-right: 10px;
-}
+} */
 
-.search-panel__results {
+/* .search-panel__results {
   flex: 3;
-}
+} */
 
 .searchbox {
   margin-bottom: 2rem;
@@ -133,11 +140,11 @@ em {
 }
 
 .ais-Hits-item:hover {
-  background-color: #DFDFDF !important;
+  background-color: #EFEFEF !important;
 }
 
 .ais-Hits-item article {
-  display: flex;
+  display: block;
   width: 100%;
   overflow: hidden !important;
 }
@@ -172,4 +179,33 @@ button {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.avatar:hover { 
+  background-color: white;
+  border: 1px solid #DFDFDF;
+}
+
+.ais-RefinementList-item {
+  padding-left: 10px;
+}
+
+.ais-RefinementList-item--selected {
+  background-color: #edffdc;
+}
+
+.ais-RefinementList-item--selected:hover {
+  background-color: #b2ed78;
+}
+
+.ais-Stats-text {
+  float: left;
+  display: block;
+  position: relative;
+  font-size: 10px;
+  font-weight: light;
+}
+
+h4 {
+  font-size: 16px !important;
 }

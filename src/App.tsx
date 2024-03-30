@@ -11,7 +11,8 @@ import {
   InstantSearch,
   Pagination,
   SearchBox,
-  RefinementList
+  RefinementList,
+  Stats
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -46,54 +47,43 @@ const future = { preserveSharedStateOnUnmount: true };
 export function App() {
   return (
     <div>
+
+      <InstantSearch
+          searchClient={searchClient}
+          indexName="Funds"
+          future={future}
+          routing={true}
+      >
+
       <header className="header">
         <h1 className="header-title">
-          {/* <img src={headerImage} className="logo" /> */}
+          Investment Funds & Programs
+          <Stats/>
         </h1>
-        <p className="header-subtitle">
-          Find Accelerators by 'Program', 'location', 'industry' or 'stage'.
-        </p>
         <div className="gh-btn">
-          <GitHubButton href="https://github.com/d1b1/techstar-search" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" data-show-count="true" aria-label="Star d1b1/techstar-search on GitHub">Star</GitHubButton>
+          <GitHubButton href="https://github.com/d1b1/accelerator-search" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" data-show-count="true" aria-label="Star d1b1/accelerator-search on GitHub">Star</GitHubButton>
         </div>
       </header>
 
-      <div className="container">
-        <InstantSearch
-          searchClient={searchClient}
-          indexName="Accelerators"
-          future={future}
-        >
-          <Configure hitsPerPage={10} />
-          <div className="search-panel">
-            <div className="filters" >
+      <div className="container-fluid">
+        
+          <Configure hitsPerPage={25} />
+
+          <div className="row">
+            <div className="col-3 d-none d-md-block d-lg-block">
 
               <div className="filter-el">
                 <h4>
-                  Investment Stage:
+                  Structure:
                 </h4>
-                <RefinementList attribute="stages" />
+                <RefinementList attribute="structure" />
               </div>
 
               <div className="filter-el">
                 <h4>
-                  Industry:
+                  Investment Focuses:
                 </h4>
-                <RefinementList searchable="true" attribute="industries" searchablePlaceholder="Enter industry/vertical name..." limit="5" />
-              </div>
-
-              <div className="filter-el">
-                <h4>
-                  City:
-                </h4>
-                <RefinementList searchable="true" searchablePlaceholder="Enter a city..." attribute="city" />
-              </div>
-
-              <div className="filter-el">
-                <h4>
-                  City:
-                </h4>
-                <RefinementList searchable="true" searchablePlaceholder="Enter a state..." attribute="state" />
+                <RefinementList attribute="industries" />
               </div>
 
               <div className="filter-el">
@@ -103,16 +93,9 @@ export function App() {
                 <RefinementList attribute="country" />
               </div>
 
-              <div className="filter-el">
-                <h4>
-                  Program Status:
-                </h4>
-                <RefinementList attribute="programType" transformItems={transformItems} />
-              </div>
-
             </div>
-            <div className="search-panel__results">
-              <SearchBox placeholder="Enter an program name..." className="searchbox" />
+            <div className="col-md-9 p-4">
+              <SearchBox placeholder="Enter a name..." className="searchbox" />
 
               <Hits hitComponent={Hit} />
 
@@ -122,8 +105,8 @@ export function App() {
             </div>
 
           </div>
-        </InstantSearch>
       </div>
+      </InstantSearch>
     </div>
   );
 }
@@ -143,23 +126,31 @@ function ImageWithFallback({ src, alt, ...props }) {
 function Hit({ hit }: HitProps) {
   return (
     <article>
-      <a href={hit['webSite']} target="_blank">
-        <ImageWithFallback src={hit.logo} width="80" alt={hit.name} />
-      </a>
-      <div className="element">
-        <h1>
-          <Highlight attribute="name" hit={hit} />
-        </h1>
-        <p>
-          <Highlight attribute="description" hit={hit} />
-        </p>
-        <p>
-          <b>Location:</b> <Highlight attribute="city" hit={hit} />, <Highlight attribute="state" hit={hit} /> <Highlight attribute="country" hit={hit} /><br/>
-          <b>Program Type:</b> <Highlight attribute="programType" hit={hit} /><br/>
-          <b>Type:</b> {hit['type']}, 
-          <b>Industry:</b> {hit['industry']}, 
-          <b>Investment Stages:</b> {hit['stages']}
-        </p>
+      <div className="row">
+        <div className="col-4">
+          <h1>
+            <Highlight attribute="name" hit={hit} />
+          </h1>
+          <p>
+            <Highlight attribute="description" hit={hit} />
+          </p>
+        </div>
+        <div className="col-4">
+          <p>
+            <b>Location:</b> <Highlight attribute="country" hit={hit} /><br/>
+            <b>Structure:</b> {hit['structure']}<br/>
+            <b>Website:</b> <a href={hit['website']} target="_blank">{hit.website}</a>
+          </p>
+        </div>
+        <div className="col-4 text-end">
+          <p>
+            {(hit.industries || []).map((item, index) => (
+              <span key={index} className="badge bg-secondary me-1">
+                {item}
+              </span>
+            ))}
+          </p>
+        </div>
       </div>
     </article>
   );
